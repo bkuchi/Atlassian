@@ -5,6 +5,7 @@ import java.util.TreeSet;
 
 public class PowerSet {
     public static void main(String[] args) {
+        main();
             int[] arr = { 1,2, 3 };
             BitSet bset = new BitSet(arr.length + 1);
             Set result = new HashSet();
@@ -46,5 +47,44 @@ public class PowerSet {
             for (int i = 1; i <= k; i++)
                 System.out.print(stack[i] + " ");
         }
-    }    
+    }
+    private static Set getSubsetUsingBitMap(List list) {
+        Set result = new HashSet();
+        int numOfSubsets = 1 << list.size();
+        for (int i = 0; i < numOfSubsets; i++) {
+            Set subset = new HashSet();
+            int mask = 1;
+            for (int k = 0; k < list.size(); k++) {
+                if ((mask & i) != 0)
+                    subset.add(list.get(k));
+                mask = mask << 1;
+            }
+            result.add(subset);
+        }
+        return result;
+    }
+
+    private static List<String> createSubsetUsingTree(List list) {
+        List result = new ArrayList();
+        result.add("");
+        for (int i = 0; i < list.size(); i++) {
+            List tempList = new ArrayList();
+            Iterator<String> iter = result.iterator();
+            while (iter.hasNext()) {
+                String val = iter.next();
+                if (val.equals(""))
+                    tempList.add(list.get(i));
+                else
+                    tempList.add(val + list.get(i));
+            }
+            result.addAll(tempList);
+        }
+        return result;
+    }
+    public static void main() {
+        List list = Arrays.asList("a", "b", "c");
+        System.out.println(getSubsetUsingBitMap(list));
+        System.out.println(createSubsetUsingTree(list));
+        printPowerset(3);
+    }
 }
